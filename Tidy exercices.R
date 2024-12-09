@@ -62,7 +62,7 @@ Q1 <- hflights %>%
 
 ### Q2 ----
 Q2 <- hflights %>% 
-  select(c(15:18))
+  select(starts_with("Taxi")|matches("D.st"))
 
 ### Q3 ----
 Q3 <- hflights %>% 
@@ -107,7 +107,6 @@ Q9 <- hflights %>%
 ### Q10 ----
 
 Q10 <- hflights %>% 
-  na.exclude() %>% 
   group_by(UniqueCarrier) %>% 
-  summarise("Retard" = mean(DepDelay)) %>% 
+  summarise("Retard" = mean(DepDelay,na.rm = T)) %>% 
   arrange(Retard)
