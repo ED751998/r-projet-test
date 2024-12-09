@@ -154,12 +154,9 @@ rg_joueurs <- rg_joueurs %>%
 Australie <- read_csv("data/openaustralie2013.csv") %>% as_tibble()
 
 ### Q8 ----
-tennis <- bind_rows(list(Australie %>% 
-                 mutate(Tournoi="OA",test="t"),data_tennis %>% 
-                 mutate(Tournoi="RG",test="j")),.id = "test")
 
-tennis <- Australie %>% mutate(Tournoi="OA") %>% 
-  rbind(data_tennis %>%  mutate(Tournoi="RG"))
+tennis <- bind_rows(RG=data_tennis,OA=Australie,.id="Tournoi")
+
 
 ### Q9 ----
 Format_long <- tennis %>% 
@@ -192,3 +189,5 @@ oa_joueurs <- oa_joueurs %>%
 
 # Jointure avec toutes les observations
 Final <- full_join(x = rg_joueurs,y = oa_joueurs,by=c("Joueur"))
+
+Left <- left_join(x = rg_joueurs,y = oa_joueurs,by="Joueur")
