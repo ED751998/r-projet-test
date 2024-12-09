@@ -32,5 +32,14 @@ Q3 <- data %>%
 
 print(Q3)
 
-#### Q4 ----
+### Q4 ----
+Q4 <- data %>% 
+  filter(Species == "versicolor") %>% 
+  summarise(Moy=mean(Petal.Width))
 
+Q4
+
+### Q5 ----
+
+Q5 <- data %>% 
+  mutate(Sum.Width = Petal.Width+Sepal.Length)
