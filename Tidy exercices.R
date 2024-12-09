@@ -43,3 +43,8 @@ Q4
 
 Q5 <- data %>% 
   mutate(Sum.Width = Petal.Width+Sepal.Length)
+
+### Q6 ----
+Q6 <- data %>% 
+  group_by(Species) %>% 
+  summarise(Moyenne = mean(Sepal.Length),Variance = var(Sepal.Length))
