@@ -87,7 +87,7 @@ for (i in seq(1,nrow(films),1)) {
 
 ### Q2 ----
 films <- films %>% cbind(data.frame(Lien=liens)) %>% 
-  mutate(bon_lien = paste0("https://www.imdb.com/title/",(Lien %>% stringr::str_extract(pattern = "\\&id.*")) %>% substr(5,10000),"/"))
+  mutate(bon_lien = paste0("https://www.imdb.com/title/",(Lien %>% stringr::str_extract(pattern = "\\&id.*")) %>% substr(5,10000),"/","/fullcredits/?ref_=tt_cst_sm"))
 
 ## Q3 ----
 
