@@ -98,3 +98,47 @@ ORDER BY `Distance`")
 
 ## Q10 - On se déconnecte ----
 dbDisconnect(conn = con)
+
+# Ex 2 ----
+
+## Q1 ----
+con <- dbConnect(RSQLite::SQLite(), dbname="data/chinook.db")
+
+Playlist <- tbl(con,"Playlist")
+Track <- tbl(con,"Track")
+PlaylistTrack <- tbl(con,"PlaylistTrack")
+
+var_Playlist <- dbListFields(con,"Playlist")
+var_Track <- dbListFields(con,"Track")
+var_PlaylistTrack <- dbListFields(con,"PlaylistTrack")
+
+## Q2 ----
+PlaylistTrack %>% 
+  group_by(PlaylistId) %>% 
+  summarise(n=n()) %>% 
+  arrange(desc(n)) %>% 
+  collect()
+
+## Q3 ----
+Album <- tbl(con,"Album")
+var_Album <- dbListFields(con,"Album")
+
+## Q4 ----
+Playlist %>% 
+  filter(Name=="Classical") %>% 
+  select(PlaylistId,Playlist=Name) %>% 
+  left_join(PlaylistTrack,by=c("PlaylistId")) %>% 
+  left_join(Track,by=c("TrackId")) %>% 
+  left_join(Album,by=c("AlbumId")) %>% 
+  select(Playlist,Musique = Name,Album = Title) %>% 
+  collect()
+
+## Q5 ----
+Playlist %>% 
+  filter(Name=="Classical") %>% 
+  select(PlaylistId,Playlist=Name) %>% 
+  left_join(PlaylistTrack,by=c("PlaylistId")) %>% 
+  left_join(Track,by=c("TrackId")) %>% 
+  left_join(Album,by=c("AlbumId")) %>% 
+  select(Playlist,Musique = Name,Album = Title) %>% 
+  show_query()
