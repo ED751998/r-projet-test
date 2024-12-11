@@ -87,18 +87,27 @@ for (i in seq(1,nrow(films),1)) {
 
 ### Q2 ----
 films <- films %>% cbind(data.frame(Lien=liens)) %>% 
-  mutate(bon_lien = paste0("https://www.imdb.com/title/",(Lien %>% stringr::str_extract(pattern = "\\&id.*")) %>% substr(5,10000),"/","/fullcredits/?ref_=tt_cst_sm"))
+  mutate(bon_lien = paste0("https://www.imdb.com/title/",(Lien %>% stringr::str_extract(pattern = "\\&id.*")) %>% substr(5,10000),"/","fullcredits/"))
 
 ## Q3 ----
 
-acteurs <- c()
+df_final <- data.frame(film=c(), acteurs=c())
 for (i in seq(1,nrow(films),1)) {
   
-  a <- read_html(films$bon_lien[i]) %>% html_nodes("div.sc-cd7dc4b7-7.vCane > a") %>% html_text()
+  a <- read_html(films$bon_lien[i]) %>% 
+    html_nodes("table.cast_list") %>% 
+    html_table() %>% 
+    as.data.frame() %>% 
+    filter(X2!="") %>%  
+    pull(X2)
   
-  acteurs <- c(acteurs,a)
+  df_final <- rbind(df_final,data.frame(film=films$titre[i],acteurs=a))
 }
 
 ## Q4 ----
-table(acteurs) %>% sort()
+df_final %>% 
+  filter(!acteurs%in%c("Cate Blanchett", "Rest of cast listed alphabetically:")) %>% 
+  group_by(acteurs) %>% 
+  summarise(n=n()) %>% 
+  arrange(desc(n))
 
